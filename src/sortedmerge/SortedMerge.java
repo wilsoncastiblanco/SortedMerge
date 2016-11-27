@@ -27,61 +27,28 @@ public class SortedMerge {
         a[8] = 23;
         a[9] = 25;
         int[] b = new int[]{6, 8, 10, 12, 14};
-        mergeSortedArrays(a, b);
+        mergeSortedArrays(a, b, 10, b.length);
     }
 
-    public static void mergeSortedArrays(int[] a, int[] b) {
-        int indexB = 0;
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] == 0) {
-                a[i] = b[indexB];
-                indexB++;
+    private static void mergeSortedArrays(int[] a, int[] b, int lastA, int lastB) {
+        int indexA = lastA - 1;
+        int indexB = lastB - 1;
+        int indexMerged = lastB + lastA - 1;
+        
+        while(indexB >= 0){
+            if(indexA >= 0 && a[indexA] > b[indexB]){
+                a[indexMerged] = a[indexA];
+                indexA--;
+            }else{
+                a[indexMerged] = b[indexB];
+                indexB--;
             }
+            indexMerged--;
         }
-        mergeSort(a);
+        
+        printResult(a);
     }
 
-    public static void mergeSort(int[] array) {
-        int[] helper = new int[array.length];
-        mergeSort(array, helper, 0, array.length - 1);
-    }
-
-    private static void mergeSort(int[] array, int[] helper, int low, int high) {
-        if (low < high) {
-            int middle = (low + high) / 2;
-            mergeSort(array, helper, low, middle);
-            mergeSort(array, helper, middle + 1, high);
-            sort(array, helper, middle, low, high);
-        }
-    }
-
-    private static void sort(int[] array, int[] helper, int middle, int low, int high) {
-        for (int i = low; i <= high; i++) {
-            helper[i] = array[i];
-        }
-
-        int helperLeft = low;
-        int helperRight = middle + 1;
-        int current = low;
-
-        while (helperLeft <= middle && helperRight <= high) {
-            if (helper[helperLeft] <= helper[helperRight]) {
-                array[current] = helper[helperLeft];
-                helperLeft++;
-            } else {
-                array[current] = helper[helperRight];
-                helperRight++;
-            }
-            current++;
-        }
-
-        int remaining = middle - helperLeft;
-        for (int i = 0; i <= remaining; i++) {
-            array[current + i] = helper[helperLeft + i];
-        }
-
-        printResult(array);
-    }
 
     private static void printResult(int[] array) {
         System.out.println("============================");
